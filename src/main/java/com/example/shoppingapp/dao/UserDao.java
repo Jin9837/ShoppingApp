@@ -1,7 +1,7 @@
 package com.example.shoppingapp.dao;
 
 import com.example.shoppingapp.domain.entity.User;
-import com.example.shoppingapp.exception.UserRegisterDuplicateException;
+import com.example.shoppingapp.exception.InvalidCredentialsException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -20,7 +20,6 @@ public class UserDao {
         Session session;
         try {
             session = sessionFactory.getCurrentSession();
-
             // Check if the username or email already exists in the User table
             String hql = "FROM User WHERE username = :username OR email = :email";
             Query query = session.createQuery(hql);
@@ -38,4 +37,31 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
+
+    public User login(String username, String password) throws InvalidCredentialsException {
+        Session session;
+        User user = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            // Check if the username and password match a record in the User table
+            String hql = "FROM User WHERE username = :username AND password = :password";
+            Query query = session.createQuery(hql);
+            query.setParameter("username", username);
+            query.setParameter("password", password);
+            List<User> result = query.list();
+
+            // If the result is not empty, the username and password match a record in the User table
+            if (!result.isEmpty()) {
+                user = result.get(0);
+            } else {
+                throw new InvalidCredentialsException("Incorrect credentials for Username and Password, please try again.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
 }

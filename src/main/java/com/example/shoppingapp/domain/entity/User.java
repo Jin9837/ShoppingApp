@@ -24,7 +24,8 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "isSeller")
-    private boolean isSeller;
+
+    @Column(name = "seller", nullable = false)
+    private boolean seller;
 
 }
