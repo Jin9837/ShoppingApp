@@ -1,8 +1,7 @@
 package com.example.shoppingapp.service;
 
-import com.example.shoppingapp.dao.ProductDao;
+import com.example.shoppingapp.dao.OrderDao;
 import com.example.shoppingapp.domain.entity.Orders;
-import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,22 +12,22 @@ import java.util.List;
 
 @Service
 @EnableTransactionManagement
-public class ProductService {
-
-    private ProductDao productDao;
+public class OrderService {
+    private OrderDao orderDao;
 
     @Autowired
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
+    public OrderService(OrderDao orderDao) {
+        this.orderDao = orderDao;
+    }
+
+
+    @Transactional
+    public List<Orders> getOrdersByUserId(int userId) {
+        return orderDao.getOrdersByUserId(userId);
     }
 
     @Transactional
-    public List<Product> viewAllValidProducts() {
-        return productDao.getAllProducts();
-    }
-
-    @Transactional
-    public Product getProductById(int productId) {
-        return productDao.getProductById(productId);
+    public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
+        orderDao.purchaseProduct(productId, userId, quantity);
     }
 }

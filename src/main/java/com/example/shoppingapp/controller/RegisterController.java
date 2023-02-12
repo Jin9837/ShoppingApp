@@ -21,7 +21,8 @@ public class RegisterController {
 
 
 
-    //Test JSON Format
+    //Test JSON Format:
+    // POST http://localhost:8080/register
     //{
     //    "email": "jin@gmail.com",
     //        "username" : "jin",

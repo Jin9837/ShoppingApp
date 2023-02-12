@@ -69,58 +69,6 @@ public class ProductDao {
     }
 
 
-    public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
-        Session session = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-            // Decrement the quantity of the product with the given id
-            Product product = session.get(Product.class, productId);
-            if (product == null) {
-                throw new NotFoundException("Product with id " + productId + " not found");
-            }
-            int newQuantity = product.getStockQuantity() - quantity;
-            if (newQuantity < 0) {
-                throw new NotEnoughInventoryException("Do not have enough stock_quantity");
-            } else {
-                product.setStockQuantity(newQuantity);
-                session.saveOrUpdate(product);
 
-                // Create a new order for the user with the given id
-                Orders order = new Orders();
-                order.setUserId(userId);
-                order.setOrderStatus("processing");
-                LocalDateTime dateTime = LocalDateTime.now();
-                Timestamp datePlaced = Timestamp.valueOf(dateTime);
-                order.setDatePlaced(datePlaced);
-
-                session.saveOrUpdate(order);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (session != null && session.getTransaction().isActive()) {
-                session.getTransaction().rollback();
-            }
-        }
-    }
-
-
-
-
-    public List<Orders> getOrdersByUserId(int userId) {
-        Session session;
-        List<Orders> orders = null;
-        try {
-            session = sessionFactory.getCurrentSession();
-
-            // Get all orders for the user with the given id
-            String hql = "FROM Orders WHERE userId = :userId";
-            Query query = session.createQuery(hql);
-            query.setParameter("userId", userId);
-            orders = query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return orders;
-    }
 
 }
