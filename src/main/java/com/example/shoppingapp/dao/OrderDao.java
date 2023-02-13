@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,6 +24,9 @@ public class OrderDao {
     private SessionFactory sessionFactory;
     @Autowired
     private OrderProductDao orderProductDao;
+    @Autowired
+    private ProductDao productDao;
+
 
     public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
         Session session = null;
@@ -43,6 +47,7 @@ public class OrderDao {
                 // Create a new order for the user with the given id
                 Orders order = new Orders();
                 order.setUserId(userId);
+
                 order.setOrderStatus("processing");
                 LocalDateTime dateTime = LocalDateTime.now();
                 Timestamp datePlaced = Timestamp.valueOf(dateTime);
@@ -117,6 +122,71 @@ public class OrderDao {
         session.saveOrUpdate(product);
         session.delete(orderProduct);
     }
+
+
+    public List<Product> getTop3FrequentlyPurchasedItems() {
+        Session session;
+        List<Product> products = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            // Get the top 3 frequently purchased products based on the product ID and order status
+            String hql = "SELECT op.productId, SUM(op.purchasedQuantity) AS totalQuantity " +
+                    "FROM OrderProduct op " +
+                    "JOIN Orders o ON op.orderId = o.orderId " +
+                    "WHERE o.orderStatus IN ('complete', 'processing') " +
+                    "GROUP BY op.productId " +
+                    "ORDER BY totalQuantity DESC";
+            Query query = session.createQuery(hql);
+            query.setMaxResults(3);
+            List<Object[]> results = query.list();
+
+            // Get the product objects for the top 3 products based on their product IDs
+            products = new ArrayList<>();
+            for (Object[] result : results) {
+                int productId = (int) result[0];
+                Product product = session.get(Product.class, productId);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+
+
+    public List<Product> getTop3FrequentlyPurchasedItems(int userId) {
+        Session session;
+        List<Product> top3Products = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            // Get the top 3 products with the most frequent product IDs
+            String hql = "SELECT op.productId, SUM(op.purchasedQuantity) AS totalPurchased " +
+                    "FROM OrderProduct op " +
+                    "JOIN Orders o ON op.orderId = o.orderId " +
+                    "WHERE o.userId = :userId AND (o.orderStatus = 'complete' OR o.orderStatus = 'processing') " +
+                    "GROUP BY op.productId " +
+                    "ORDER BY totalPurchased DESC";
+            Query query = session.createQuery(hql);
+            query.setParameter("userId", userId);
+            query.setMaxResults(3);
+            List<Object[]> result = query.list();
+
+            // Get the product details for each product ID
+            top3Products = new ArrayList<>();
+            for (Object[] row : result) {
+                int productId = (int) row[0];
+                Product product = productDao.getProductById(productId);
+                top3Products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return top3Products;
+    }
+
 
 
 }

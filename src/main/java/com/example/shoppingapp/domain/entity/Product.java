@@ -28,7 +28,8 @@ public class Product {
     @Column(name = "stockQuantity", nullable = false)
     private int stockQuantity;
 
-    public Product(String name, String description, float retailPrice) {
+    public Product(int productId, String name, String description, float retailPrice) {
+        this.productId = productId;
         this.name = name;
         this.description = description;
         this.retailPrice = retailPrice;

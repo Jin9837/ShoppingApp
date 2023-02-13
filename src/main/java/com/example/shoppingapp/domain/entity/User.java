@@ -3,6 +3,8 @@ package com.example.shoppingapp.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="User")
@@ -27,5 +29,8 @@ public class User {
 
     @Column(name = "seller", nullable = false)
     private boolean seller;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Orders> orders = new ArrayList<>();
 
 }

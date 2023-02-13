@@ -30,16 +30,6 @@ public class OrderProductDao {
         Session session = null;
         Optional<OrderProduct> orderProduct = null;
         try {
-//            session = sessionFactory.getCurrentSession();
-//
-//            // Get all orders for the user with the given id
-//            String hql = "FROM OrderProduct WHERE orderId = : orderId";
-//            Query query = session.createQuery(hql);
-//            query.setParameter("orderId", orderId);
-//            orderProduct = query.list();
-
-
-
             session = sessionFactory.getCurrentSession();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<OrderProduct> cq = cb.createQuery(OrderProduct.class);
@@ -53,4 +43,29 @@ public class OrderProductDao {
         }
         return (orderProduct.isPresent())? orderProduct.get() : null;
     }
+
+
+
+    public OrderProduct getOrderProductByOrderId(int userId, int orderId) {
+        Session session;
+        OrderProduct orderProduct = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            // Get the OrderProduct by its order ID and user ID
+            String hql = "FROM OrderProduct op JOIN Orders o ON op.orderId = o.orderId WHERE o.userId = :userId AND op.orderId = :orderId";
+            Query query = session.createQuery(hql);
+            query.setParameter("userId", userId);
+            query.setParameter("orderId", orderId);
+            Object[] result = (Object[]) query.uniqueResult();
+            if (result != null) {
+                orderProduct = (OrderProduct) result[0];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderProduct;
+    }
+
+
 }

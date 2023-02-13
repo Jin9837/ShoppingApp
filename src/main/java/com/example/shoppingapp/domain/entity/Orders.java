@@ -19,6 +19,10 @@ public class Orders {
     private int orderId;
     @Column(name = "userId", nullable = false)
     private int userId;
+
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    //    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    //    private User user;
     @Column(name = "orderStatus", nullable = false)
     private String orderStatus;
 

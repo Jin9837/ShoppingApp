@@ -51,7 +51,7 @@ public class ProductDao {
         Product product = null;
         try {
             session = sessionFactory.getCurrentSession();
-            String hql = "SELECT new com.example.shoppingapp.domain.entity.Product(p.name, p.description, p.retailPrice) FROM Product p WHERE stockQuantity > 0 AND productId = :productId";
+            String hql = "SELECT new com.example.shoppingapp.domain.entity.Product(p.id, p.name, p.description, p.retailPrice) FROM Product p WHERE stockQuantity > 0 AND productId = :productId";
             Query query = session.createQuery(hql);
             query.setParameter("productId", productId);
             List<Product> result = query.list();
