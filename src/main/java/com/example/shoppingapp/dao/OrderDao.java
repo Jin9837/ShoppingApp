@@ -1,5 +1,6 @@
 package com.example.shoppingapp.dao;
 
+import com.example.shoppingapp.domain.entity.OrderProduct;
 import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
@@ -10,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +21,8 @@ public class OrderDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private OrderProductDao orderProductDao;
 
     public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
         Session session = null;
@@ -43,8 +47,17 @@ public class OrderDao {
                 LocalDateTime dateTime = LocalDateTime.now();
                 Timestamp datePlaced = Timestamp.valueOf(dateTime);
                 order.setDatePlaced(datePlaced);
-
                 session.saveOrUpdate(order);
+
+
+                // Create a new orderProduct for the user and his order
+                OrderProduct orderProduct = new OrderProduct();
+                orderProduct.setOrderId(order.getOrderId());
+                orderProduct.setProductId(product.getProductId());
+                orderProduct.setPurchasedQuantity(quantity);
+                orderProduct.setExecutionRetailPrice(product.getRetailPrice());
+                orderProduct.setExecutionWholesalePrice(product.getWholesalePrice());
+                session.saveOrUpdate(orderProduct);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,18 +85,37 @@ public class OrderDao {
         return orders;
     }
 
+    public void cancelOrderByOrderId(int orderId, String newStatus) throws NotFoundException {
+        Session session = sessionFactory.getCurrentSession();
+        Orders order = session.get(Orders.class, orderId);
+        OrderProduct orderProduct = orderProductDao.getOrderProductByOrderId(orderId);
 
-//    public Orders updateOrderStatus(int orderId, String status) {
-//        Orders order = orderRepository.findByOrderId(orderId);
-//        if (order != null) {
-//            if (order.getStatus().equals("Processing")) {
-//                order.setStatus("Canceled");
-//                orderRepository.save(order);
-//            } else if (order.getStatus().equals("Completed")) {
-//                return null;
-//            }
-//        }
-//        return order;
-//    }
+        if (order == null) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        if (!order.getOrderStatus().equals("processing")) {
+            throw new IllegalStateException("Cannot cancel a non-processing order");
+        }
+
+        if (newStatus.equals("completed")) {
+            throw new IllegalStateException("Cannot change order status to completed");
+        }
+
+        order.setOrderStatus(newStatus);
+        session.update(order);
+
+        int quantity = orderProduct.getPurchasedQuantity();
+        int productId = orderProduct.getProductId();
+        Product product = session.get(Product.class, productId);
+        if (product == null) {
+            throw new NotFoundException("Product with id " + productId + " not found");
+        }
+        int newQuantity = product.getStockQuantity() + quantity;
+        product.setStockQuantity(newQuantity);
+        session.saveOrUpdate(product);
+        session.delete(orderProduct);
+    }
+
 
 }

@@ -4,6 +4,7 @@ import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.request.PurchaseRequest;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
 import com.example.shoppingapp.service.OrderService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +39,13 @@ public class OrdersController {
     @PostMapping("/purchase")
     public void purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) throws NotEnoughInventoryException {
         orderService.purchaseProduct(purchaseRequest.getProductId(), purchaseRequest.getUserId(), purchaseRequest.getQuantity());
+    }
+
+
+
+    //PATCH  http://localhost:8080/orders/cancel/2
+    @PatchMapping("/orders/cancel/{orderId}")
+    public void cancelOrderByOrderId(@PathVariable int orderId) throws NotFoundException {
+        orderService.cancelOrderByOrderId(orderId, "canceled");
     }
 }
