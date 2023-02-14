@@ -6,6 +6,9 @@ import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.domain.request.SellerAddProductRequest;
 import com.example.shoppingapp.domain.request.SellerModifyProductRequest;
+import com.example.shoppingapp.domain.request.UpdateProcessingOrderBySeller;
+import com.example.shoppingapp.exception.InvalidCredentialsException;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -24,7 +27,7 @@ public class SellerService {
 
     @Transactional
     public List<Orders> getAllOrdersBySeller(int userId) {
-        return  orderDao.getAllOrdersBySeller(userId);
+        return orderDao.getAllOrdersBySeller(userId);
     }
 
     @Transactional
@@ -41,4 +44,16 @@ public class SellerService {
     public void addProductBySellerAndProductId(int userId, SellerAddProductRequest sellerAddProductRequest) {
         productDao.addProductBySellerAndProductId(userId, sellerAddProductRequest);
     }
+
+    @Transactional
+    public void updateProcessingOrderToCompleteBySellerAndOrderId(int userId, UpdateProcessingOrderBySeller updateProcessingOrderBySeller) throws NotFoundException, InvalidCredentialsException {
+        orderDao.updateProcessingOrderToCompleteBySellerAndOrderId(userId, updateProcessingOrderBySeller);
+    }
+
+
+    @Transactional
+    public void cancelOrderBySellerWithOrderIdAndUserId(int userId, UpdateProcessingOrderBySeller updateProcessingOrderBySeller) throws NotFoundException, InvalidCredentialsException {
+        orderDao.cancelOrderBySellerWithOrderIdAndUserId(userId, updateProcessingOrderBySeller);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.example.shoppingapp.domain.entity.OrderProduct;
 import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.domain.entity.User;
+import com.example.shoppingapp.domain.request.UpdateProcessingOrderBySeller;
 import com.example.shoppingapp.exception.InvalidCredentialsException;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
 import javassist.NotFoundException;
@@ -13,7 +14,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -152,6 +152,78 @@ public class OrderDao {
         session.saveOrUpdate(product);
         session.delete(orderProduct);
     }
+
+
+    public void cancelOrderBySellerWithOrderIdAndUserId(int userId, UpdateProcessingOrderBySeller updateProcessingOrderBySeller) throws NotFoundException, InvalidCredentialsException {
+        Session session = sessionFactory.getCurrentSession();
+
+        User user = session.get(User.class, userId);
+        String permissionRole = user.getPermissionRole();
+        if (!Objects.equals(permissionRole, "seller")) {
+            throw new InvalidCredentialsException("You are not a seller, cannot cancel the order.");
+        }
+
+        Orders order = session.get(Orders.class, updateProcessingOrderBySeller.getOrderId());
+        OrderProduct orderProduct = orderProductDao.getOrderProductByOrderId(updateProcessingOrderBySeller.getOrderId());
+
+        if (order == null) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        if (!order.getOrderStatus().equals("processing")) {
+            throw new IllegalStateException("Cannot cancel a non-processing order");
+        }
+
+        if (updateProcessingOrderBySeller.getNewStatus().equals("completed")) {
+            throw new IllegalStateException("Cannot change order status to completed");
+        }
+
+        order.setOrderStatus(updateProcessingOrderBySeller.getNewStatus());
+        session.update(order);
+
+        int quantity = orderProduct.getPurchasedQuantity();
+        int productId = orderProduct.getProductId();
+        Product product = session.get(Product.class, productId);
+        if (product == null) {
+            throw new NotFoundException("Product with id " + productId + " not found");
+        }
+        int newQuantity = product.getStockQuantity() + quantity;
+        product.setStockQuantity(newQuantity);
+        session.saveOrUpdate(product);
+        session.delete(orderProduct);
+    }
+
+
+    public void updateProcessingOrderToCompleteBySellerAndOrderId(int userId, UpdateProcessingOrderBySeller updateProcessingOrderBySeller) throws NotFoundException, InvalidCredentialsException {
+        Session session = sessionFactory.getCurrentSession();
+
+        User user = session.get(User.class, userId);
+        String permissionRole = user.getPermissionRole();
+        if (!Objects.equals(permissionRole, "seller")) {
+            throw new InvalidCredentialsException("You are not a seller, cannot complete the order.");
+        }
+
+        Orders order = session.get(Orders.class, updateProcessingOrderBySeller.getOrderId());
+        OrderProduct orderProduct = orderProductDao.getOrderProductByOrderId(updateProcessingOrderBySeller.getOrderId());
+
+        if (order == null) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        if (order.getOrderStatus().equals("completed")) {
+            throw new IllegalStateException("The order is already completed, cannot complete again");
+        }
+
+        if (!order.getOrderStatus().equals("processing")) {
+            throw new IllegalStateException("Cannot complete a non-processing order");
+        }
+
+
+        order.setOrderStatus(updateProcessingOrderBySeller.getNewStatus());
+        session.update(order);
+    }
+
+
 
 
     public List<Product> getTop3FrequentlyPurchasedItems() {
