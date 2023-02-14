@@ -26,9 +26,9 @@ public class ProductController {
 
 
     // GET     http://localhost:8080/product/1
-    @GetMapping("/product/{productId}")
-    public Product getProductById(@PathVariable int productId) {
-        return productService.getProductById(productId);
+    @GetMapping("/product/{userId}")
+    public Product getProductById(@PathVariable int userId) {
+        return productService.getProductById(userId);
     }
 
 

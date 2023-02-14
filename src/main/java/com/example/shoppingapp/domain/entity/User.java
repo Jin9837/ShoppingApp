@@ -37,5 +37,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Orders> orders = new ArrayList<>();
+
+    public String getPermissionRole() {
+        for (UserPermission userPermission : userPermissions) {
+            if (userPermission.getUser().getUserId() == this.userId) {
+                return userPermission.getPermission().getPermissionRole();
+            }
+        }
+        return null;
+    }
 }
 

@@ -18,4 +18,5 @@ public class Permissions {
     private int permissionId;
     @Column(name = "permissionRole", nullable = false)
     private String permissionRole;
+
 }

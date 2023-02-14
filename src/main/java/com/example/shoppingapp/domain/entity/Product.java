@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +27,15 @@ public class Product {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Positive(message = "Retail price must be greater than 0.")
     @Column(name = "retailPrice", nullable = false)
     private float retailPrice;
+
+    @Positive(message = "Wholesale price must be greater than 0.")
     @Column(name = "wholesalePrice", nullable = false)
     private float wholesalePrice;
+
+    @Min(value = 0, message = "Stock quantity cannot be negative.")
     @Column(name = "stockQuantity", nullable = false)
     private int stockQuantity;
 

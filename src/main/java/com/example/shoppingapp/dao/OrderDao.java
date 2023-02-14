@@ -4,6 +4,7 @@ import com.example.shoppingapp.domain.entity.OrderProduct;
 import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.domain.entity.User;
+import com.example.shoppingapp.exception.InvalidCredentialsException;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
 import javassist.NotFoundException;
 import org.hibernate.Session;
@@ -17,6 +18,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class OrderDao {
@@ -86,6 +88,32 @@ public class OrderDao {
             Query query = session.createQuery(hql);
             query.setParameter("userId", userId);
             orders = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+
+    // verity that the useId is belongs to a seller permission, otherwise throw not a seller exception
+    public List<Orders> getAllOrdersBySeller(int userId) {
+        Session session;
+        List<Orders> orders = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+            User user = session.get(User.class, userId);
+            String permissionRole = user.getPermissionRole();
+            if (!Objects.equals(permissionRole, "seller"))
+            {
+                throw new InvalidCredentialsException("You are not a seller, cannot view this Order infomatoin page.");
+            }
+            else
+            {
+                // Get all orders for the user with the given id
+                String hql = "FROM Orders o";
+                Query query = session.createQuery(hql);
+                orders = query.list();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
