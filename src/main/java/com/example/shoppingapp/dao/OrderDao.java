@@ -51,18 +51,20 @@ public class OrderDao {
                 Orders order = new Orders();
                 order.setUser(session.get(User.class, userId));
 
-
                 order.setOrderStatus("processing");
                 LocalDateTime dateTime = LocalDateTime.now();
                 Timestamp datePlaced = Timestamp.valueOf(dateTime);
                 order.setDatePlaced(datePlaced);
                 session.saveOrUpdate(order);
 
+                // Load the Orders and Product objects before setting them on the OrderProduct object
+                order = session.get(Orders.class, order.getOrderId());
+                product = session.get(Product.class, product.getProductId());
 
                 // Create a new orderProduct for the user and his order
                 OrderProduct orderProduct = new OrderProduct();
-                orderProduct.setOrderId(order.getOrderId());
-                orderProduct.setProductId(product.getProductId());
+                orderProduct.setOrder(order);
+                orderProduct.setProduct(product);
                 orderProduct.setPurchasedQuantity(quantity);
                 orderProduct.setExecutionRetailPrice(product.getRetailPrice());
                 orderProduct.setExecutionWholesalePrice(product.getWholesalePrice());
@@ -75,6 +77,7 @@ public class OrderDao {
             }
         }
     }
+
 
 
     public List<Orders> getOrdersByUserId(int userId) {
@@ -92,6 +95,30 @@ public class OrderDao {
             e.printStackTrace();
         }
         return orders;
+    }
+
+    public Orders getOrdersBySellerAndOrderId(int userId, int orderId) {
+        Session session;
+        List<Orders> orders = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            User user = session.get(User.class, userId);
+            String permissionRole = user.getPermissionRole();
+            if (!Objects.equals(permissionRole, "seller"))
+            {
+                throw new InvalidCredentialsException("You are not a seller, cannot view this specific Order information page.");
+            }
+
+            // Get all orders for the user with the given id
+            String hql = "FROM Orders o WHERE o.orderId = :orderId";
+            Query query = session.createQuery(hql);
+            query.setParameter("orderId", orderId);
+            orders = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders.get(0);
     }
 
 
@@ -142,7 +169,7 @@ public class OrderDao {
         session.update(order);
 
         int quantity = orderProduct.getPurchasedQuantity();
-        int productId = orderProduct.getProductId();
+        int productId = orderProduct.getProduct().getProductId();
         Product product = session.get(Product.class, productId);
         if (product == null) {
             throw new NotFoundException("Product with id " + productId + " not found");
@@ -182,7 +209,7 @@ public class OrderDao {
         session.update(order);
 
         int quantity = orderProduct.getPurchasedQuantity();
-        int productId = orderProduct.getProductId();
+        int productId = orderProduct.getProduct().getProductId();
         Product product = session.get(Product.class, productId);
         if (product == null) {
             throw new NotFoundException("Product with id " + productId + " not found");
@@ -233,11 +260,11 @@ public class OrderDao {
             session = sessionFactory.getCurrentSession();
 
             // Get the top 3 frequently purchased products based on the product ID and order status
-            String hql = "SELECT op.productId, SUM(op.purchasedQuantity) AS totalQuantity " +
+            String hql = "SELECT op.product.productId, SUM(op.purchasedQuantity) AS totalQuantity " +
                     "FROM OrderProduct op " +
-                    "JOIN Orders o ON op.orderId = o.orderId " +
+                    "JOIN Orders o ON op.order.orderId = o.orderId " +
                     "WHERE o.orderStatus IN ('complete', 'processing') " +
-                    "GROUP BY op.productId " +
+                    "GROUP BY op.product.productId " +
                     "ORDER BY totalQuantity DESC";
             Query query = session.createQuery(hql);
             query.setMaxResults(3);
@@ -265,11 +292,11 @@ public class OrderDao {
             session = sessionFactory.getCurrentSession();
 
             // Get the top 3 products with the most frequent product IDs
-            String hql = "SELECT op.productId, SUM(op.purchasedQuantity) AS totalPurchased " +
+            String hql = "SELECT op.product.productId, SUM(op.purchasedQuantity) AS totalPurchased " +
                     "FROM OrderProduct op " +
-                    "JOIN Orders o ON op.orderId = o.orderId " +
+                    "JOIN Orders o ON op.order.orderId = o.orderId " +
                     "WHERE o.user.userId = :userId AND (o.orderStatus = 'complete' OR o.orderStatus = 'processing') " +
-                    "GROUP BY op.productId " +
+                    "GROUP BY op.product.productId " +
                     "ORDER BY totalPurchased DESC";
             Query query = session.createQuery(hql);
             query.setParameter("userId", userId);
@@ -288,7 +315,6 @@ public class OrderDao {
         }
         return top3Products;
     }
-
 
 
 }

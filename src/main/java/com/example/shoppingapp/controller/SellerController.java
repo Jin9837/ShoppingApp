@@ -2,10 +2,12 @@ package com.example.shoppingapp.controller;
 
 import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
+import com.example.shoppingapp.domain.entity.User;
 import com.example.shoppingapp.domain.request.SellerAddProductRequest;
 import com.example.shoppingapp.domain.request.SellerModifyProductRequest;
 import com.example.shoppingapp.domain.request.UpdateProcessingOrderBySeller;
 import com.example.shoppingapp.exception.InvalidCredentialsException;
+import com.example.shoppingapp.service.OrderProductService;
 import com.example.shoppingapp.service.SellerService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,20 @@ public class SellerController {
     private SellerService sellerService;
 
 
+
     // GET  http://localhost:8080/seller/orders/1   (1 means it is a seller)
     @GetMapping("seller/orders/{userId}")
     public List<Orders> getAllOrdersBySeller(@PathVariable int userId) {
         return sellerService.getAllOrdersBySeller(userId);
     }
+
+
+    // GET  http://localhost:8080/seller/getOrdersBySellerAndOrderId?userId=1&orderId=2
+    @GetMapping("seller/getOrdersBySellerAndOrderId")
+    public Orders getOrdersBySellerAndOrderId(@RequestParam int userId, @RequestParam int orderId) {
+        return sellerService.getOrdersBySellerAndOrderId(userId, orderId);
+    }
+
 
 
     // GET  http://localhost:8080/seller/products/1   (1 means it is a seller)
@@ -77,4 +88,32 @@ public class SellerController {
         sellerService.cancelOrderBySellerWithOrderIdAndUserId(userId, updateProcessingOrderBySeller);
     }
 
+
+
+    // GET  http://localhost:8080/seller/getMostProfitableProductsBySeller/1
+    @GetMapping("seller/getMostProfitableProductsBySeller/{userId}")
+    public List<Product> getMostProfitableProductsBySeller(@PathVariable int userId) throws InvalidCredentialsException {
+        return sellerService.getMostProfitableProductsBySeller(userId);
+    }
+
+
+    // GET  http://localhost:8080/seller/getTop3FrequentlyPurchasedProducts/1
+    @GetMapping("seller/getTop3FrequentlyPurchasedProducts/{userId}")
+    public List<Product> getTop3FrequentlyPurchasedProducts(@PathVariable int userId) throws InvalidCredentialsException {
+        return sellerService.getTop3FrequentlyPurchasedProducts(userId);
+    }
+
+
+    // GET  http://localhost:8080/seller/getTotalSoldItemsBySeller/1
+    @GetMapping("seller/getTotalSoldItemsBySeller/{userId}")
+    public int getTotalSoldItemsBySeller(@PathVariable int userId) {
+        return sellerService.getTotalSoldItemsBySeller(userId);
+    }
+
+
+    // GET  http://localhost:8080/seller/getTop3UsersByTotalPurchaseAmount/1
+    @GetMapping("seller/getTop3UsersByTotalPurchaseAmount/{userId}")
+    public List<User> getTop3UsersByTotalPurchaseAmount(@PathVariable int userId) {
+        return sellerService.getTop3UsersByTotalPurchaseAmount(userId);
+    }
 }
