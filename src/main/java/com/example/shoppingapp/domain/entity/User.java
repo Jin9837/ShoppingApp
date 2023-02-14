@@ -27,8 +27,12 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "seller", nullable = false)
-    private boolean seller;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserPermission> userPermissions = new ArrayList<>();
+
+
+//    @Column(name = "seller", nullable = false)
+//    private boolean seller;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<Orders> orders = new ArrayList<>();
