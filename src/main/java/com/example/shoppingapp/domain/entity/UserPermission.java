@@ -20,10 +20,10 @@ public class UserPermission {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "permissionId")
+    @JoinColumn(name = "permissionId", nullable = false)
     private Permissions permission;
 }

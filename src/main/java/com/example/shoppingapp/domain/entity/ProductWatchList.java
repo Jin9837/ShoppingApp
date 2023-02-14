@@ -16,8 +16,12 @@ public class ProductWatchList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productWatchListId", unique = true, nullable = false)
     private int productWatchListId;
-    @Column(name = "userId", nullable = false)
-    private int userId;
-    @Column(name = "productId", nullable = false)
-    private int productId;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)
+    private Product product;
 }

@@ -20,51 +20,34 @@ public class ProductWatchListDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void addToProductWatchList(int userId, int productId){
+    public void addToProductWatchList(int userId, int productId) {
         Session session;
         try {
             session = sessionFactory.getCurrentSession();
             User user = session.get(User.class, userId);
             Product product = session.get(Product.class, productId);
             if (user != null && product != null && product.getStockQuantity() > 0) {
-                ProductWatchList productWatchLists = new ProductWatchList();
-                productWatchLists.setUserId(userId);
-                productWatchLists.setProductId(productId);
-                session.saveOrUpdate(productWatchLists);
+                ProductWatchList productWatchList = new ProductWatchList();
+                productWatchList.setUser(user);
+                productWatchList.setProduct(product);
+                session.saveOrUpdate(productWatchList);
             } else {
                 throw new NotEnoughInventoryException("Product/User does not exist or StockQuantity is not enough");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
+
     public void removeFromProductWatchList(int userId, int productId) throws EntityNotFoundException{
-//        Session session = null;
-//        try {
-//            session = sessionFactory.getCurrentSession();
-//            Query query = session.createQuery("DELETE FROM ProductWatchList WHERE userId = :userId AND productId = :productId");
-//            query.setParameter("userId", userId);
-//            query.setParameter("productId", productId);
-//            int result = query.executeUpdate();
-//            if (result == 0) {
-//                throw new EntityNotFoundException("ProductWatchList with userId " + userId + " and productId " + productId + " was not found");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (session != null && session.isOpen()) {
-//                session.close();
-//            }
-//        }
 
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Query query = session.createQuery("DELETE FROM ProductWatchList WHERE userId = :userId AND productId = :productId");
+            Query query = session.createQuery("DELETE FROM ProductWatchList WHERE user.userId = :userId AND product.productId = :productId");
             query.setParameter("userId", userId);
             query.setParameter("productId", productId);
             int result = query.executeUpdate();
@@ -94,7 +77,7 @@ public class ProductWatchListDao {
 //            Query query = session.createQuery(hql);
 //            productWatchLists = query.list();
 
-            String hql = "FROM ProductWatchList pw LEFT JOIN Product p ON pw.productId = p.productId WHERE pw.userId = :userId AND p.stockQuantity > 0";
+            String hql = "FROM ProductWatchList pw LEFT JOIN Product p ON pw.product.productId = p.productId WHERE pw.user.userId = :userId AND p.stockQuantity > 0";
             Query query = session.createQuery(hql);
             query.setParameter("userId", userId);
             productWatchLists = query.list();

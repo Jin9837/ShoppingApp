@@ -1,5 +1,6 @@
 package com.example.shoppingapp.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@JsonIgnoreProperties({"userPermissions", "productWatchLists"})
 public class User {
 
     @Id
@@ -30,11 +32,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPermission> userPermissions = new ArrayList<>();
 
-
-//    @Column(name = "seller", nullable = false)
-//    private boolean seller;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Orders> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ProductWatchList> productWatchLists = new ArrayList<>();
 
 }
