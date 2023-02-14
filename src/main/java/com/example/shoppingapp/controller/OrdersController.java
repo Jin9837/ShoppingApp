@@ -23,7 +23,7 @@ public class OrdersController {
     }
 
 
-    // GET     http://localhost:8080/orders/2
+    // GET     http://localhost:8080/orders/3
     @GetMapping("/orders/{userId}")
     public List<Orders> getOrdersByUserId(@PathVariable int userId) {
         return orderService.getOrdersByUserId(userId);

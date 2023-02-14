@@ -53,7 +53,7 @@ public class OrderProductDao {
             session = sessionFactory.getCurrentSession();
 
             // Get the OrderProduct by its order ID and user ID
-            String hql = "FROM OrderProduct op JOIN Orders o ON op.orderId = o.orderId WHERE o.userId = :userId AND op.orderId = :orderId";
+            String hql = "FROM OrderProduct op JOIN Orders o ON op.orderId = o.orderId WHERE o.user.userId = :userId AND op.orderId = :orderId";
             Query query = session.createQuery(hql);
             query.setParameter("userId", userId);
             query.setParameter("orderId", orderId);

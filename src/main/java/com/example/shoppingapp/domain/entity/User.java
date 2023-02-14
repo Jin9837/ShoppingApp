@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@JsonIgnoreProperties({"userPermissions", "productWatchLists"})
+@JsonIgnoreProperties({"userPermissions", "productWatchLists", "orders"})
 public class User {
 
     @Id
@@ -35,4 +35,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProductWatchList> productWatchLists = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Orders> orders = new ArrayList<>();
 }
+

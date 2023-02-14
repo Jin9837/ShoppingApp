@@ -37,10 +37,6 @@ public class RegisterController {
 //    }
     @PostMapping("/register")
     public String addUser(@RequestBody RegisterRequest registerRequest){
-//        System.out.println("isSeller: " + user.isSeller());
-//         userService.addUser(user);
-//         return "Register success";
-
 
         User user = new User();
         user.setEmail(registerRequest.getEmail());

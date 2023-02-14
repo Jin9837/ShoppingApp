@@ -3,6 +3,7 @@ package com.example.shoppingapp.dao;
 import com.example.shoppingapp.domain.entity.OrderProduct;
 import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
+import com.example.shoppingapp.domain.entity.User;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
 import javassist.NotFoundException;
 import org.hibernate.Session;
@@ -46,7 +47,8 @@ public class OrderDao {
 
                 // Create a new order for the user with the given id
                 Orders order = new Orders();
-                order.setUserId(userId);
+                order.setUser(session.get(User.class, userId));
+
 
                 order.setOrderStatus("processing");
                 LocalDateTime dateTime = LocalDateTime.now();
@@ -80,7 +82,7 @@ public class OrderDao {
             session = sessionFactory.getCurrentSession();
 
             // Get all orders for the user with the given id
-            String hql = "FROM Orders WHERE userId = :userId";
+            String hql = "FROM Orders o WHERE o.user.userId = :userId";
             Query query = session.createQuery(hql);
             query.setParameter("userId", userId);
             orders = query.list();
@@ -166,7 +168,7 @@ public class OrderDao {
             String hql = "SELECT op.productId, SUM(op.purchasedQuantity) AS totalPurchased " +
                     "FROM OrderProduct op " +
                     "JOIN Orders o ON op.orderId = o.orderId " +
-                    "WHERE o.userId = :userId AND (o.orderStatus = 'complete' OR o.orderStatus = 'processing') " +
+                    "WHERE o.user.userId = :userId AND (o.orderStatus = 'complete' OR o.orderStatus = 'processing') " +
                     "GROUP BY op.productId " +
                     "ORDER BY totalPurchased DESC";
             Query query = session.createQuery(hql);
