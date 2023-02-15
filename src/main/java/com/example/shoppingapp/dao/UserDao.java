@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDao {
@@ -64,4 +65,28 @@ public class UserDao {
         return user;
     }
 
+
+    public User loadUserByUsername(String username){
+        Session session;
+        User user = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+
+            // Check if the username and password match a record in the User table
+            String hql = "FROM User WHERE username = :username";
+            Query query = session.createQuery(hql);
+            query.setParameter("username", username);
+            List<User> result = query.list();
+
+            // If the result is not empty, the username and password match a record in the User table
+            if (!result.isEmpty()) {
+                user = result.get(0);
+            } else {
+                throw new InvalidCredentialsException("Incorrect credentials for Username and Password, please try again.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 }
