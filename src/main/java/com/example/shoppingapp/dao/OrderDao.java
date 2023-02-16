@@ -80,22 +80,23 @@ public class OrderDao {
 
 
 
-    public List<Orders> getOrdersByUserId(int userId) {
+    public List<Orders> getOrdersByUsername(String username) {
         Session session;
         List<Orders> orders = null;
         try {
             session = sessionFactory.getCurrentSession();
 
             // Get all orders for the user with the given id
-            String hql = "FROM Orders o WHERE o.user.userId = :userId";
+            String hql = "FROM Orders o WHERE o.user.username = :username";
             Query query = session.createQuery(hql);
-            query.setParameter("userId", userId);
+            query.setParameter("username", username);
             orders = query.list();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return orders;
     }
+
 
     public Orders getOrdersBySellerAndOrderId(int userId, int orderId) {
         Session session;

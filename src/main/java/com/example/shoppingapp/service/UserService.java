@@ -56,6 +56,7 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+
     private List<GrantedAuthority> getAuthoritiesFromUser(User user){
         List<GrantedAuthority> userAuthorities = new ArrayList<>();
         userAuthorities.add(new SimpleGrantedAuthority(user.getPermissionRole()));

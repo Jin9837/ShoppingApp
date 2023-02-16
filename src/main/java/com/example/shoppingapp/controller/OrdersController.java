@@ -4,30 +4,55 @@ import com.example.shoppingapp.domain.entity.Orders;
 import com.example.shoppingapp.domain.entity.Product;
 import com.example.shoppingapp.domain.request.PurchaseRequest;
 import com.example.shoppingapp.exception.NotEnoughInventoryException;
+import com.example.shoppingapp.security.AuthUserDetail;
 import com.example.shoppingapp.service.OrderService;
 import javassist.NotFoundException;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class OrdersController {
 
     private final OrderService orderService;
 
-    @Autowired
+//    Logger logger = (Logger) LoggerFactory.getLogger(OrdersController.class);
 
+    @Autowired
     public OrdersController(OrderService orderService) {
         this.orderService = orderService;
     }
 
 
     // GET     http://localhost:8080/orders/3
-    @GetMapping("/orders/{userId}")
-    public List<Orders> getOrdersByUserId(@PathVariable int userId) {
-        return orderService.getOrdersByUserId(userId);
+//    @GetMapping("/orders/{userId}")
+//    public List<Orders> getOrdersByUserId(@PathVariable int userId) {
+//        return orderService.getOrdersByUserId(userId);
+//    }
+
+    @GetMapping("/orders/{username}")
+    public List<Orders> getOrdersByUsername(@PathVariable String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal().toString());
+        if (authentication != null && authentication.isAuthenticated()) {
+            System.out.println("User is authenticated");
+        } else {
+            System.out.println("User is not authenticated");
+        }
+        return orderService.getOrdersByUsername(username);
     }
+
+
 
 
     //    Test Json format:
@@ -40,6 +65,7 @@ public class OrdersController {
     @PostMapping("/purchase")
     public void purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) throws NotEnoughInventoryException {
         orderService.purchaseProduct(purchaseRequest.getProductId(), purchaseRequest.getUserId(), purchaseRequest.getQuantity());
+//        logger.info("User places the order at: " + String.valueOf(LocalDateTime.now()));
     }
 
 

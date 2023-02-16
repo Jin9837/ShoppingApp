@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class OrderService {
 
 
     @Transactional
-    public List<Orders> getOrdersByUserId(int userId) {
-        return orderDao.getOrdersByUserId(userId);
+    public List<Orders> getOrdersByUsername(@PathVariable String username) {
+        return orderDao.getOrdersByUsername(username);
     }
 
     @Transactional
