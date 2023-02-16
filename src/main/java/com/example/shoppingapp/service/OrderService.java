@@ -29,11 +29,11 @@ public class OrderService {
         return orderDao.getOrdersByUsername(username);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = NotEnoughInventoryException.class)
     public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
         orderDao.purchaseProduct(productId, userId, quantity);
-
     }
+
 
     @Transactional
     public void cancelOrderByOrderId(int orderId, String newStatus) throws NotFoundException {

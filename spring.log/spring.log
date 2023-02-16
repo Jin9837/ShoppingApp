@@ -1,72 +1,19 @@
-2023-02-15 16:04:02.977  INFO 41692 --- [main] c.e.shoppingapp.ShoppingAppApplication   : Starting ShoppingAppApplication using Java 18 on ShiyideMBP.attlocal.net with PID 41692 (/Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp/target/classes started by shiyi in /Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp)
-2023-02-15 16:04:02.978  INFO 41692 --- [main] c.e.shoppingapp.ShoppingAppApplication   : No active profile set, falling back to 1 default profile: "default"
-2023-02-15 16:04:03.535  INFO 41692 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2023-02-15 16:04:03.539  INFO 41692 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2023-02-15 16:04:03.539  INFO 41692 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
-2023-02-15 16:04:03.576  INFO 41692 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2023-02-15 16:04:03.577  INFO 41692 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 583 ms
-2023-02-15 16:04:03.664  WARN 41692 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-02-15 16:04:03.732  INFO 41692 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.14.Final}
-2023-02-15 16:04:03.733  INFO 41692 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
-2023-02-15 16:04:03.807  INFO 41692 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
-2023-02-15 16:04:03.906  INFO 41692 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
-2023-02-15 16:04:04.217  WARN 41692 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ordersController' defined in file [/Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp/target/classes/com/example/shoppingapp/controller/OrdersController.class]: Bean instantiation via constructor failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.example.shoppingapp.controller.OrdersController]: Constructor threw exception; nested exception is java.lang.ClassCastException: class ch.qos.logback.classic.Logger cannot be cast to class java.util.logging.Logger (ch.qos.logback.classic.Logger is in unnamed module of loader 'app'; java.util.logging.Logger is in module java.logging of loader 'bootstrap')
-2023-02-15 16:04:04.219  INFO 41692 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2023-02-15 16:04:04.227  INFO 41692 --- [main] ConditionEvaluationReportLoggingListener : 
-
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2023-02-15 16:04:04.237 ERROR 41692 --- [main] o.s.boot.SpringApplication               : Application run failed
-
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ordersController' defined in file [/Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp/target/classes/com/example/shoppingapp/controller/OrdersController.class]: Bean instantiation via constructor failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.example.shoppingapp.controller.OrdersController]: Constructor threw exception; nested exception is java.lang.ClassCastException: class ch.qos.logback.classic.Logger cannot be cast to class java.util.logging.Logger (ch.qos.logback.classic.Logger is in unnamed module of loader 'app'; java.util.logging.Logger is in module java.logging of loader 'bootstrap')
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:315) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:296) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:918) ~[spring-context-5.3.22.jar:5.3.22]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583) ~[spring-context-5.3.22.jar:5.3.22]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147) ~[spring-boot-2.7.2.jar:2.7.2]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:734) ~[spring-boot-2.7.2.jar:2.7.2]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408) ~[spring-boot-2.7.2.jar:2.7.2]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308) ~[spring-boot-2.7.2.jar:2.7.2]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306) ~[spring-boot-2.7.2.jar:2.7.2]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295) ~[spring-boot-2.7.2.jar:2.7.2]
-	at com.example.shoppingapp.ShoppingAppApplication.main(ShoppingAppApplication.java:10) ~[classes/:na]
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.example.shoppingapp.controller.OrdersController]: Constructor threw exception; nested exception is java.lang.ClassCastException: class ch.qos.logback.classic.Logger cannot be cast to class java.util.logging.Logger (ch.qos.logback.classic.Logger is in unnamed module of loader 'app'; java.util.logging.Logger is in module java.logging of loader 'bootstrap')
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:224) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:117) ~[spring-beans-5.3.22.jar:5.3.22]
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:311) ~[spring-beans-5.3.22.jar:5.3.22]
-	... 19 common frames omitted
-Caused by: java.lang.ClassCastException: class ch.qos.logback.classic.Logger cannot be cast to class java.util.logging.Logger (ch.qos.logback.classic.Logger is in unnamed module of loader 'app'; java.util.logging.Logger is in module java.logging of loader 'bootstrap')
-	at com.example.shoppingapp.controller.OrdersController.<init>(OrdersController.java:29) ~[classes/:na]
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:67) ~[na:na]
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483) ~[na:na]
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:211) ~[spring-beans-5.3.22.jar:5.3.22]
-	... 21 common frames omitted
-
-2023-02-15 16:24:38.537  INFO 41792 --- [main] c.e.shoppingapp.ShoppingAppApplication   : Starting ShoppingAppApplication using Java 18 on ShiyideMBP.attlocal.net with PID 41792 (/Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp/target/classes started by shiyi in /Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp)
-2023-02-15 16:24:38.539  INFO 41792 --- [main] c.e.shoppingapp.ShoppingAppApplication   : No active profile set, falling back to 1 default profile: "default"
-2023-02-15 16:24:39.132  INFO 41792 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2023-02-15 16:24:39.137  INFO 41792 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2023-02-15 16:24:39.137  INFO 41792 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
-2023-02-15 16:24:39.177  INFO 41792 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2023-02-15 16:24:39.177  INFO 41792 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 620 ms
-2023-02-15 16:24:39.272  WARN 41792 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-02-15 16:24:39.350  INFO 41792 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.14.Final}
-2023-02-15 16:24:39.351  INFO 41792 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
-2023-02-15 16:24:39.424  INFO 41792 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
-2023-02-15 16:24:39.532  INFO 41792 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
-2023-02-15 16:24:40.151  INFO 41792 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@138b9abe, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@279e8bc0, org.springframework.security.web.context.SecurityContextPersistenceFilter@32b1e906, org.springframework.security.web.header.HeaderWriterFilter@198c0f1c, org.springframework.security.web.authentication.logout.LogoutFilter@7b92ea9d, com.example.shoppingapp.security.JwtFilter@abbe000, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6e1d9b32, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@cc7909f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@23ffc910, org.springframework.security.web.session.SessionManagementFilter@2d758472, org.springframework.security.web.access.ExceptionTranslationFilter@51c4992e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2f4fc18]
-2023-02-15 16:24:40.159  INFO 41792 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
-2023-02-15 16:24:40.186  INFO 41792 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2023-02-15 16:24:40.195  INFO 41792 --- [main] c.e.shoppingapp.ShoppingAppApplication   : Started ShoppingAppApplication in 1.804 seconds (JVM running for 2.043)
-2023-02-15 16:24:40.497  INFO 41792 --- [RMI TCP Connection(3)-192.168.1.79] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2023-02-15 16:24:40.497  INFO 41792 --- [RMI TCP Connection(3)-192.168.1.79] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2023-02-15 16:24:40.497  INFO 41792 --- [RMI TCP Connection(3)-192.168.1.79] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-02-16 00:00:32.316  INFO 44436 --- [main] c.e.shoppingapp.ShoppingAppApplication   : Starting ShoppingAppApplication using Java 18 on ShiyideMBP.attlocal.net with PID 44436 (/Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp/target/classes started by shiyi in /Users/shiyi/Desktop/B_hw/Week4Day5 - Shiyi Zhang/ShoppingApp)
+2023-02-16 00:00:32.317  INFO 44436 --- [main] c.e.shoppingapp.ShoppingAppApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-02-16 00:00:32.956  INFO 44436 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-02-16 00:00:32.960  INFO 44436 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-02-16 00:00:32.960  INFO 44436 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-02-16 00:00:33.000  INFO 44436 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-02-16 00:00:33.000  INFO 44436 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 664 ms
+2023-02-16 00:00:33.111  WARN 44436 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-02-16 00:00:33.174  INFO 44436 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.14.Final}
+2023-02-16 00:00:33.175  INFO 44436 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2023-02-16 00:00:33.240  INFO 44436 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2023-02-16 00:00:33.342  INFO 44436 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-02-16 00:00:33.895  INFO 44436 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4e782401, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2bb84aa5, org.springframework.security.web.context.SecurityContextPersistenceFilter@a20898c, org.springframework.security.web.header.HeaderWriterFilter@3741071d, org.springframework.security.web.authentication.logout.LogoutFilter@6f7a65e, com.example.shoppingapp.security.JwtFilter@4dd90166, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@22d47f09, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a2815cc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4853f592, org.springframework.security.web.session.SessionManagementFilter@268e30d4, org.springframework.security.web.access.ExceptionTranslationFilter@289cf7db, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1a05ff8e]
+2023-02-16 00:00:33.909  INFO 44436 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2023-02-16 00:00:33.932  INFO 44436 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-02-16 00:00:33.940  INFO 44436 --- [main] c.e.shoppingapp.ShoppingAppApplication   : Started ShoppingAppApplication in 1.769 seconds (JVM running for 1.983)
+2023-02-16 00:00:34.132  INFO 44436 --- [RMI TCP Connection(3)-192.168.1.79] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-16 00:00:34.132  INFO 44436 --- [RMI TCP Connection(3)-192.168.1.79] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-02-16 00:00:34.133  INFO 44436 --- [RMI TCP Connection(3)-192.168.1.79] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

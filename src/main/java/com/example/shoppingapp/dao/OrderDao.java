@@ -73,10 +73,15 @@ public class OrderDao {
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null && session.getTransaction().isActive()) {
-                session.getTransaction().rollback();
+                try {
+                    session.getTransaction().rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
+
 
 
 

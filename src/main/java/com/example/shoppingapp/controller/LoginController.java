@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -53,18 +54,21 @@ public class LoginController {
 
 
     @PostMapping("auth/login")
-    public LoginResponse login(@RequestBody LoginRequest request){
+    public LoginResponse login(@RequestBody LoginRequest request) throws InvalidCredentialsException{
 
         Authentication authentication;
 
         //Try to authenticate the user using the username and password
-        try{
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-        } catch (AuthenticationException e){
-            throw new BadCredentialsException("Provided credential is invalid.");
-        }
+//        try{
+//            authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+//            );
+//        } catch (AuthenticationException e){
+//            throw new BadCredentialsException("Provided credential is invalid.");
+//        }
+
+        authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         //Successfully authenticated user will be stored in the authUserDetail object
         AuthUserDetail authUserDetail = (AuthUserDetail) authentication.getPrincipal(); //getPrincipal() returns the user object
