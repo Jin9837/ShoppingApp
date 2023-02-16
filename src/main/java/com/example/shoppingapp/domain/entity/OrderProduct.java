@@ -1,5 +1,7 @@
 package com.example.shoppingapp.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +25,7 @@ public class OrderProduct {
     private Orders order;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore // ignore the product field during serialization
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
@@ -35,3 +38,4 @@ public class OrderProduct {
     @Column(name = "executionWholesalePrice", nullable = false)
     private float executionWholesalePrice;
 }
+

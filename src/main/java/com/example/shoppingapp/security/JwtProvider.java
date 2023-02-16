@@ -41,6 +41,10 @@ public class JwtProvider {
     public Optional<AuthUserDetail> resolveToken(HttpServletRequest request){
         String prefixedToken = request.getHeader("Authorization"); // extract token value by key "Authorization"
 
+        if (prefixedToken == null || !prefixedToken.startsWith("Bearer ")) {
+            return Optional.empty();
+        }
+
         String token = prefixedToken.substring(7); // remove the prefix "Bearer "
 //        System.out.println(key);
         byte[] keyBytes = key.getBytes();

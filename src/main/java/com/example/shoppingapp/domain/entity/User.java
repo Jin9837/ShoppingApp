@@ -29,8 +29,11 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<UserPermission> userPermissions = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserPermission> userPermissions = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProductWatchList> productWatchLists = new ArrayList<>();

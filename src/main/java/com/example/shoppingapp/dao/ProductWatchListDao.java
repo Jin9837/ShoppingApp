@@ -43,10 +43,9 @@ public class ProductWatchListDao {
 
     public void removeFromProductWatchList(int userId, int productId) throws EntityNotFoundException{
 
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
+        Session session;
         try {
-            transaction = session.beginTransaction();
+            session = sessionFactory.getCurrentSession();
             Query query = session.createQuery("DELETE FROM ProductWatchList WHERE user.userId = :userId AND product.productId = :productId");
             query.setParameter("userId", userId);
             query.setParameter("productId", productId);
@@ -54,37 +53,22 @@ public class ProductWatchListDao {
             if (result == 0) {
                 throw new EntityNotFoundException("ProductWatchList with userId " + userId + " and productId " + productId + " was not found");
             }
-            transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
-    public List<ProductWatchList> getAllProductWatchList(int userId){
-        Session session;
+
+    public List<ProductWatchList> getAllProductWatchList(int userId) {
         List<ProductWatchList> productWatchLists = null;
+        Session session;
         try {
-            session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-
-            // Get all products where the quantity is greater than 0
-//            String hql = "FROM ProductWatchList";
-//            Query query = session.createQuery(hql);
-//            productWatchLists = query.list();
-
-            String hql = "FROM ProductWatchList pw LEFT JOIN Product p ON pw.product.productId = p.productId WHERE pw.user.userId = :userId AND p.stockQuantity > 0";
-            Query query = session.createQuery(hql);
+            session = sessionFactory.getCurrentSession();
+            String hql = "FROM ProductWatchList pw LEFT JOIN FETCH pw.product WHERE pw.user.userId = :userId AND pw.product.stockQuantity > 0";
+            Query<ProductWatchList> query = session.createQuery(hql, ProductWatchList.class);
             query.setParameter("userId", userId);
-            productWatchLists = query.list();
+            productWatchLists = query.getResultList();
 
-
-            transaction.commit();
-            session.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
