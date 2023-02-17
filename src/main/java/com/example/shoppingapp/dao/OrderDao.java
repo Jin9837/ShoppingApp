@@ -31,7 +31,7 @@ public class OrderDao {
     private ProductDao productDao;
 
 
-    public void purchaseProduct(int productId, int userId, int quantity) throws NotEnoughInventoryException {
+    public void purchaseProduct(int productId, int userId, int quantity) {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
@@ -70,6 +70,9 @@ public class OrderDao {
                 orderProduct.setExecutionWholesalePrice(product.getWholesalePrice());
                 session.saveOrUpdate(orderProduct);
             }
+        } catch (NotEnoughInventoryException e1)
+        {
+            throw e1;
         } catch (Exception e) {
             e.printStackTrace();
             if (session != null && session.getTransaction().isActive()) {
